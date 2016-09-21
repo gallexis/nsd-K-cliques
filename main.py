@@ -59,20 +59,47 @@ def load_graph(graph):
     return nodes
 
 
+# Exercice 5
+"""
+Yes it is necessary to store the graph in memory, otherwise we would have to browse the file from the beginning to the end
+of the file to look for all neigbours of one node, and compute that task for each nodes.
+"""
+def get_zero_degree_nodes(loadedGraph):
+    zero = []
 
+    for node, neighbours in loadedGraph.items():
+        if len(neighbours) == 0:
+            zero.append(node)
 
+    return len(zero)
 
+def get_density_nodes(loadedGraph):
+    pass
 
+def get_average_degree_nodes(loadedGraph):
+    pass
 
+def get_min_degree_nodes(loadedGraph):
+    return len( min(loadedGraph.values()) )
+
+def get_max_degree_nodes(loadedGraph):
+    return len( max(loadedGraph.values()) )
 
 
 if "__main__" == __name__:
 
-    with open("graph", "r+") as file:
+    with open("graph2", "r+") as file:
         graph= file.read().splitlines()
 
         print("Exercise n°2, size of graph: ", size_of_graph(graph))
         print("Exercise n°3, degree of each nodes:", nodes_degrees(graph))
 
-        a = load_graph(graph)
-        print(a)
+
+        ld = load_graph(graph)
+
+        print("\nExercise n°5:")
+        print("\tNumber of nodes of degree 0: ",get_zero_degree_nodes(ld))
+        print("\tDensity of the graph: ")
+        print("\tAverage degre of the graph: ")
+        print("\tMinimum degree of the graph: ",get_min_degree_nodes(ld))
+        print("\tMaximum degree of the graph: ",get_max_degree_nodes(ld))
