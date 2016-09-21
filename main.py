@@ -1,18 +1,16 @@
 
 def get_nodes_from_edge(edge):
-    nodes = edge.split(' ')
-    return nodes[0], nodes[1]
+    return edge.split(' ')
 
 
 def get_nodes_from_graph(graph):
-    nodes = set()
+    nodesSet = set()
 
     for edge in graph:
-        n1,n2 = get_nodes_from_edge(edge)
-        nodes.add(n1)
-        nodes.add(n2)
+        nodes = get_nodes_from_edge(edge)
+        [nodesSet.add(n) for n in nodes]
 
-    return list(nodes)
+    return list(nodesSet)
 
 #Exercise 2
 def size_of_graph(graph):
@@ -24,10 +22,15 @@ def nodes_degrees(graph):
     nodesDegrees = {}
 
     for edge in graph:
-        n1,n2 = get_nodes_from_edge(edge)
+        nodes = get_nodes_from_edge(edge)
+        n1 = nodes[0]
 
-        if n1 in nodesDegrees:
+        if len(nodes) == 1:
+            nodesDegrees[n1] = 0
+
+        elif n1 in nodesDegrees:
             nodesDegrees[n1] += 1
+
         else:
             nodesDegrees[n1] = 1
 
