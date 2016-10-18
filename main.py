@@ -1,4 +1,4 @@
-
+from queue import Queue
 
 def get_nodes_from_edge(edge):
     return edge.split(' ')
@@ -48,15 +48,24 @@ def load_graph(graph):
 
         # if node's degree == 0, empty list
         if len(ns) == 1:
-            nodes[n0] = []
+            nodes[n0] = set()
 
-        # if nodes already in dict, append his new neighbour
-        elif n0 in nodes:
-            nodes[n0].append(ns[1])
-
-        # if node not yet in dict, initialise a new list & add his neighbour
         else:
-            nodes[n0] = [ns[1]]
+            n1 = ns[1]
+            # if nodes already in dict, append his new neighbour
+            if n0 in nodes:
+                nodes[n0].add(n1)
+
+            # if node not yet in dict, initialise a new list & add his neighbour
+            else:
+                nodes[n0] = set(n1)
+
+            if n1 in nodes:
+                nodes[n1].add(n0)
+
+            # if node not yet in dict, initialise a new list & add his neighbour
+            else:
+                nodes[n1] = set(n0)
 
     return nodes
 
@@ -128,6 +137,21 @@ def delete_loop(loadedGraph):
     return loadedGraph
 
 
+def bfs(graph, start):
+    queue,visited = Queue(), []
+
+    queue.put(start)
+    visited.append(start)
+
+    while not queue.empty():
+        node = queue.get()
+        for n in graph[node]:
+            if n not in visited:
+                queue.put(n)
+                visited.append(n)
+
+    return visited
+
 if "__main__" == __name__:
 
     with open("graph2", "r+") as file:
@@ -150,3 +174,7 @@ if "__main__" == __name__:
 
         print("\nExercice 6: ", degree_distribution(ld))
         print("\nExercice 7: ", delete_loop(ld))
+
+
+        a = bfs(ld,"3021")
+        print(a)
