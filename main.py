@@ -1,4 +1,5 @@
 
+
 def get_nodes_from_edge(edge):
     return edge.split(' ')
 
@@ -14,6 +15,7 @@ def get_nodes_from_graph(graph):
 
 #Exercise 2
 def size_of_graph(graph):
+
     nodes = get_nodes_from_graph(graph)
     return len(nodes)
 
@@ -23,7 +25,6 @@ def nodes_degrees(graph):
 
     for edge in graph:
         nodes = get_nodes_from_edge(edge)
-        print(nodes)
         n0 = nodes[0]
 
         if len(nodes) == 1:
@@ -81,10 +82,24 @@ def get_average_degree_nodes(loadedGraph):
     pass
 
 def get_min_degree_nodes(loadedGraph):
-    return len( min(loadedGraph.values()) )
+    values = list(loadedGraph.values())
+    tmp = len(values[0])
+    for v in values:
+        x = len(v)
+        if tmp > x:
+            tmp = x
+
+    return tmp
 
 def get_max_degree_nodes(loadedGraph):
-    return len( max(loadedGraph.values()) )
+    values = list(loadedGraph.values())
+    tmp = len(values[0])
+    for v in values:
+        x = len(v)
+        if tmp < x:
+            tmp = x
+
+    return tmp
 
 
 # Exercice 6
@@ -96,17 +111,28 @@ def degree_distribution(loadedGraph):
         distribution[i] = 0
 
     for n in loadedGraph:
-        distribution[len(loadedGraph[n])]+=1
+        try:
+            distribution[len(loadedGraph[n])]+=1
+        except Exception as e:
+            print(e)
+            return
 
     return distribution
 
+# Exercice 7
+def delete_loop(loadedGraph):
+    for node in loadedGraph:
+        if node in loadedGraph[node]:
+            loadedGraph[node].remove(node)
+
+    return loadedGraph
 
 
 if "__main__" == __name__:
 
-    with open("graph", "r+") as file:
+    with open("graph2", "r+") as file:
         graph= file.read().splitlines()
-        print(graph)
+        #print(graph)
 
         print("Exercise n°2, size of graph: ", size_of_graph(graph))
         print("Exercise n°3, degree of each nodes:", nodes_degrees(graph))
@@ -122,5 +148,5 @@ if "__main__" == __name__:
         print("\tMinimum degree of the graph: ",get_min_degree_nodes(ld))
         print("\tMaximum degree of the graph: ",get_max_degree_nodes(ld))
 
-
         print("\nExercice 6: ", degree_distribution(ld))
+        print("\nExercice 7: ", delete_loop(ld))
