@@ -175,6 +175,7 @@ if "__main__" == __name__:
         print("\nExercice 6: ", degree_distribution(ld))
         print("\nExercice 7: ", delete_loop(ld))
 
-
-        a = bfs(ld,"3021")
+        n = "3021"
+        print("\nGenerating BFS, given node ",n," :")
+        a = bfs(ld,n)
         print(a)
