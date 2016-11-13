@@ -73,13 +73,26 @@ def get_k_clique(k,graph):
 
 
 def merge_cliques(cliques):
-    clique_list = sorted(list(cliques), key=str.__len__)
+    clique_list_of_sets = []
+    final_clique_list_of_sets = []
 
-    print(clique_list)
+    clique_list = sorted(cliques , key=str.__len__)
+    [clique_list_of_sets.append(set(c.split(' '))) for c in clique_list]
 
+    for set1 in clique_list_of_sets:
+        if is_bigger_set(set1,clique_list_of_sets):
+            final_clique_list_of_sets.append(set1)
 
-    return ""
+    return final_clique_list_of_sets
 
+def is_bigger_set(set1,sets):
+    for set2 in sets:
+        if set1 == set2:
+            continue
+        elif set1.issubset(set2):
+            return False
+
+    return True
 
 def remove_subsets(sets):
     subset = []
@@ -157,5 +170,5 @@ if "__main__" == __name__:
         print("loaded graph:", lg)
         c =get_k_clique(3,lg)
         print("2-clique: ",c)
-        print(merge_cliques(set(["1 2 3","1 2 3","1 2 3 4 5","1 3 5", "3 4 5"])))
+        print(merge_cliques(set(["1 2 3","1 2 3","1 2 3 4 5","1 3 5", "3 4 5 6"])))
 
