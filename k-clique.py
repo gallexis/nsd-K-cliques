@@ -54,9 +54,6 @@ def get_clique(k,A,B,graph):
             if len(NewB) == 0:
                 return
             get_clique(k,A,NewB,graph)
-            #A.remove(n)
-
-
 
 def get_k_clique(k,graph):
 
@@ -67,7 +64,6 @@ def get_k_clique(k,graph):
         A.add(node)
         [B.add(n) for n in get_neighbours(node,graph)]
         get_clique(k,A,B,graph)
-        #graph.remove(n)
 
     return clique
 
@@ -75,37 +71,39 @@ def get_k_clique(k,graph):
 def merge_cliques(cliques):
     clique_list_of_sets = []
     final_clique_list_of_sets = []
-
     clique_list = sorted(cliques , key=str.__len__)
+
     [clique_list_of_sets.append(set(c.split(' '))) for c in clique_list]
 
-    for set1 in clique_list_of_sets:
-        if is_bigger_set(set1,clique_list_of_sets):
-            final_clique_list_of_sets.append(set1)
+    index = 0
+    max_len = len(clique_list_of_sets)
+    while index < max_len-1:
+        set1 = clique_list_of_sets[index]
+
+        if is_biggest_subset(set1, clique_list_of_sets, index+1,max_len):
+            final_clique_list_of_sets.append(" ".join(sorted(set1)))
+
+        index+=1
+
+    # The last one is not in the previous iteration, and must always be added in the list
+    # (as long as the list is sorted)
+    final_clique_list_of_sets.append(" ".join(sorted(clique_list_of_sets[max_len-1])))
 
     return final_clique_list_of_sets
 
-def is_bigger_set(set1,sets):
-    for set2 in sets:
-        if set1 == set2:
-            continue
-        elif set1.issubset(set2):
+def is_biggest_subset(set1, sets, index,max_len):
+    while index < max_len - 1:
+        if set1.issubset(sets[index]):
             return False
+        index +=1
 
     return True
-
-def remove_subsets(sets):
-    subset = []
-
-    for index,elt in enumerate(sets):
-        pass
 
 ## Fin k-clique ##
 
 
 def get_nodes_from_edge(edge):
     return edge.split(' ')
-
 
 def get_nodes_from_graph(graph):
     nodesSet = set()
@@ -117,7 +115,6 @@ def get_nodes_from_graph(graph):
     return list(nodesSet)
 
 def size_of_graph(graph):
-
     nodes = get_nodes_from_graph(graph)
     return len(nodes)
 
@@ -167,8 +164,25 @@ if "__main__" == __name__:
         lg = load_graph(graph)
         delete_loop(lg)
 
-        print("loaded graph:", lg)
-        c =get_k_clique(3,lg)
-        print("2-clique: ",c)
-        print(merge_cliques(set(["1 2 3","1 2 3","1 2 3 4 5","1 3 5", "3 4 5 6"])))
+        print("Loaded graph:", lg,"\n")
 
+        ### Display a k-clique
+        k = 2
+        clique = get_k_clique(k,lg)
+
+        print(k,"-clique: ",clique)
+        print("merged clique: ",merge_cliques(clique),"\n")
+
+        ### Generate then merge k1 to kn cliques
+        k1= 2
+        k2= 4
+        cliques = []
+        print(k1,"to ",k2,"clique:")
+
+        for k in range(k1,k2+1):
+            cliques += get_k_clique(k,lg)
+
+        print("all cliques: ", cliques)
+
+        merged_cliques = merge_cliques(cliques)
+        print("merged cliques: ", merged_cliques)
