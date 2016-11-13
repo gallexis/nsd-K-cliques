@@ -73,12 +73,19 @@ def get_k_clique(k,graph):
 
 
 def merge_cliques(cliques):
-    final_cliques_set = set()
+    clique_list = sorted(list(cliques), key=str.__len__)
 
-    print(cliques)
+    print(clique_list)
 
 
-    return final_cliques_set
+    return ""
+
+
+def remove_subsets(sets):
+    subset = []
+
+    for index,elt in enumerate(sets):
+        pass
 
 ## Fin k-clique ##
 
@@ -150,5 +157,5 @@ if "__main__" == __name__:
         print("loaded graph:", lg)
         c =get_k_clique(3,lg)
         print("2-clique: ",c)
-        print(merge_cliques(set(["1 2 3","1 2 3","1 2 3 4 5","1 3 5", "1 3 5 6"])))
+        print(merge_cliques(set(["1 2 3","1 2 3","1 2 3 4 5","1 3 5", "3 4 5"])))
 
