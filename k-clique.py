@@ -1,3 +1,4 @@
+import copy
 ### K-clique ###
 
 """
@@ -30,6 +31,7 @@ def f(c):
 
 	for elt
 """
+clique = set()
 
 def get_neighbours(node,graph):
     try:
@@ -40,18 +42,23 @@ def get_neighbours(node,graph):
 def get_clique(k,A,B,graph):
     global clique
 
-    while len(B) > 0 or k < len(A):
+    while len(B) > 0 and len(A) < k :
         for n in B:
             A.add(n)
-            B.difference( get_neighbours(n, graph) ) # or [B.remove(n) for n in get_neighbours(n, graph)]
-            get_clique(k,A,B,graph)
-            A.remove(n)
+            NewB=copy.deepcopy(B)
+            NewB.remove(n)
+            NewB=NewB.intersection(get_neighbours(n, graph))
+            if k == len(A):
+                clique.add(" ".join(sorted(A)))
+                return
+            if len(NewB) == 0:
+                return
+            get_clique(k,A,NewB,graph)
+            #A.remove(n)
 
-        if k == len(A):
-            clique.append( list(A) )
+
 
 def get_k_clique(k,graph):
-    clique = []
 
     for node in graph:
         A = set()
@@ -59,11 +66,19 @@ def get_k_clique(k,graph):
 
         A.add(node)
         [B.add(n) for n in get_neighbours(node,graph)]
-
         get_clique(k,A,B,graph)
         #graph.remove(n)
 
     return clique
+
+
+def merge_cliques(cliques):
+    final_cliques_set = set()
+
+    print(cliques)
+
+
+    return final_cliques_set
 
 ## Fin k-clique ##
 
@@ -133,6 +148,7 @@ if "__main__" == __name__:
         delete_loop(lg)
 
         print("loaded graph:", lg)
-        print("2-clique: ",get_k_clique(2,lg))
-
+        c =get_k_clique(3,lg)
+        print("2-clique: ",c)
+        print(merge_cliques(set(["1 2 3","1 2 3","1 2 3 4 5","1 3 5", "1 3 5 6"])))
 
