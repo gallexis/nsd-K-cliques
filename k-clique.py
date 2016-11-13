@@ -77,7 +77,7 @@ def merge_cliques(cliques):
 
     index = 0
     max_len = len(clique_list_of_sets)
-    while index < max_len-1:
+    while index < max_len:
         set1 = clique_list_of_sets[index]
 
         if is_biggest_subset(set1, clique_list_of_sets, index+1,max_len):
@@ -85,16 +85,13 @@ def merge_cliques(cliques):
 
         index+=1
 
-    # The last one is not in the previous iteration, and must always be added in the list
-    # (as long as the list is sorted)
-    final_clique_list_of_sets.append(" ".join(sorted(clique_list_of_sets[max_len-1])))
-
     return final_clique_list_of_sets
 
 def is_biggest_subset(set1, sets, index,max_len):
-    while index < max_len - 1:
+    while index < max_len:
         if set1.issubset(sets[index]):
             return False
+
         index +=1
 
     return True
@@ -166,8 +163,11 @@ if "__main__" == __name__:
 
         print("Loaded graph:", lg,"\n")
 
+        print("------>merged clique: ", merge_cliques({"1 2","1 2 3","4 3 2 1","4"}), "\n")
+
+
         ### Display a k-clique
-        k = 2
+        k = 3
         clique = get_k_clique(k,lg)
 
         print(k,"-clique: ",clique)
