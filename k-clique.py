@@ -31,31 +31,26 @@ def f(c):
 
 	for elt
 """
-clique = set()
 
 def get_neighbours(node,graph):
-    try:
-        return graph[node]
-    except:
-        return set()
+    return graph[node]
 
 def get_clique(k,A,B,graph):
-    global clique
+    while len(B) > 0 and len(A) < k:
+        n = B.pop()
+        A.add(n)
+        B= B.intersection(get_neighbours(n, graph))
 
-    while len(B) > 0 and len(A) < k :
-        for n in B:
-            A.add(n)
-            NewB=copy.deepcopy(B)
-            NewB.remove(n)
-            NewB=NewB.intersection(get_neighbours(n, graph))
-            if k == len(A):
-                clique.add(" ".join(sorted(A)))
-                return
-            if len(NewB) == 0:
-                return
-            get_clique(k,A,NewB,graph)
+        if k == len(A):
+            sub_cliques = get_clique(k,A,B,graph)
+
+            #[" ".join(sorted(A))] --> convert {'b','a','c'} to "a b c"
+            return list(set( [" ".join(sorted(A))] + sub_cliques) )
+
+    return []
 
 def get_k_clique(k,graph):
+    clique = []
 
     for node in graph:
         A = set()
@@ -63,7 +58,7 @@ def get_k_clique(k,graph):
 
         A.add(node)
         [B.add(n) for n in get_neighbours(node,graph)]
-        get_clique(k,A,B,graph)
+        clique += get_clique(k,A,B,graph)
 
     return clique
 
@@ -155,7 +150,7 @@ def delete_loop(loadedGraph):
 
 if "__main__" == __name__:
 
-    with open("graph", "r+") as file:
+    with open("graph2", "r+") as file:
         graph= file.read().splitlines()
 
         lg = load_graph(graph)
@@ -163,7 +158,9 @@ if "__main__" == __name__:
 
         print("Loaded graph:", lg,"\n")
 
-        print("------>merged clique: ", merge_cliques({"1 2","1 2 3","4 3 2 1","4"}), "\n")
+        #Test with predefined cliques
+        #test = merge_cliques({"1 2","1 2 3","4 3 1 2","4","2 9"})
+        #print("------> Test merged clique: ", test, "\n")
 
 
         ### Display a k-clique
@@ -174,7 +171,7 @@ if "__main__" == __name__:
         print("merged clique: ",merge_cliques(clique),"\n")
 
         ### Generate then merge k1 to kn cliques
-        k1= 2
+        k1= 1
         k2= 4
         cliques = []
         print(k1,"to ",k2,"clique:")
