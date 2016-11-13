@@ -1,4 +1,5 @@
-import copy
+import matrix
+
 ### K-clique ###
 
 """
@@ -64,25 +65,25 @@ def get_k_clique(k,graph):
 
 
 def merge_cliques(cliques):
-    clique_list_of_sets = []
-    final_clique_list_of_sets = []
+    list_of_sets = []
+    final_list_of_sets = []
     clique_list = sorted(cliques , key=str.__len__)
 
-    [clique_list_of_sets.append(set(c.split(' '))) for c in clique_list]
+    [list_of_sets.append(set(c.split(' '))) for c in clique_list]
 
     index = 0
-    max_len = len(clique_list_of_sets)
+    max_len = len(list_of_sets)
     while index < max_len:
-        set1 = clique_list_of_sets[index]
+        set1 = list_of_sets[index]
 
-        if is_biggest_subset(set1, clique_list_of_sets, index+1,max_len):
-            final_clique_list_of_sets.append(" ".join(sorted(set1)))
+        if is_biggest_set(set1, list_of_sets, index+1, max_len):
+            final_list_of_sets.append(" ".join(sorted(set1)))
 
         index+=1
 
-    return final_clique_list_of_sets
+    return final_list_of_sets
 
-def is_biggest_subset(set1, sets, index,max_len):
+def is_biggest_set(set1, sets, index, max_len):
     while index < max_len:
         if set1.issubset(sets[index]):
             return False
@@ -150,7 +151,7 @@ def delete_loop(loadedGraph):
 
 if "__main__" == __name__:
 
-    with open("graph2", "r+") as file:
+    with open("graph", "r+") as file:
         graph= file.read().splitlines()
 
         lg = load_graph(graph)
@@ -171,15 +172,19 @@ if "__main__" == __name__:
         print("merged clique: ",merge_cliques(clique),"\n")
 
         ### Generate then merge k1 to kn cliques
-        k1= 1
-        k2= 4
+        k1= 2
+        k2= 5
         cliques = []
         print(k1,"to ",k2,"clique:")
 
         for k in range(k1,k2+1):
+            print("Generation of a",k,"clique")
             cliques += get_k_clique(k,lg)
 
-        print("all cliques: ", cliques)
+        print("All cliques: ", cliques)
 
         merged_cliques = merge_cliques(cliques)
-        print("merged cliques: ", merged_cliques)
+        print("Merged cliques: ", merged_cliques)
+
+        overlapMatrix = matrix.createOverlapMatrix(merged_cliques)
+        print(matrix.createCommunitiesMatrix(overlapMatrix, 4))
