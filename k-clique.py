@@ -40,11 +40,11 @@ def get_clique(k,A,B,graph):
     while len(B) > 0 and len(A) < k:
         n = B.pop()
         A.add(n)
-        B= B.intersection(get_neighbours(n, graph))
+        B = B.intersection(get_neighbours(n, graph))
+        #print(A, n, B)
 
         if k == len(A):
             sub_cliques = get_clique(k,A,B,graph)
-
             #[" ".join(sorted(A))] --> convert {'b','a','c'} to "a b c"
             return list(set( [" ".join(sorted(A))] + sub_cliques) )
 
@@ -56,13 +56,12 @@ def get_k_clique(k,graph):
     for node in graph:
         A = set()
         B = set()
-
         A.add(node)
         [B.add(n) for n in get_neighbours(node,graph)]
-        clique += get_clique(k,A,B,graph)
+        c = get_clique(k,A,B,graph)
+        clique += c
 
     return clique
-
 
 def merge_cliques(cliques):
     list_of_sets = []
@@ -77,7 +76,7 @@ def merge_cliques(cliques):
         set1 = list_of_sets[index]
 
         if is_biggest_set(set1, list_of_sets, index+1, max_len):
-            final_list_of_sets.append(" ".join(sorted(set1)))
+            final_list_of_sets.append(sorted(set1))
 
         index+=1
 
@@ -133,10 +132,10 @@ def load_graph(graph):
             else:
                 nodes[n0] = set(n1)
 
+            # same as before, but with opposite nodes, in case there is
+            # A B, but not B A
             if n1 in nodes:
                 nodes[n1].add(n0)
-
-            # if node not yet in dict, initialise a new list & add his neighbour
             else:
                 nodes[n1] = set(n0)
 
@@ -170,7 +169,7 @@ if "__main__" == __name__:
 
         print(k,"-clique: ",clique)
         print("merged clique: ",merge_cliques(clique),"\n")
-
+        """
         ### Generate then merge k1 to kn cliques
         k1= 2
         k2= 5
@@ -185,6 +184,8 @@ if "__main__" == __name__:
 
         merged_cliques = merge_cliques(cliques)
         print("Merged cliques: ", merged_cliques)
+        print(merged_cliques)
 
         overlapMatrix = matrix.createOverlapMatrix(merged_cliques)
         print(matrix.createCommunitiesMatrix(overlapMatrix, 4))
+        """
