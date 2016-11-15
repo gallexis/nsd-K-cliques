@@ -1,35 +1,28 @@
 import matrix
-
+from itertools import *
+import itertools
 ### K-clique ###
 
 """
 List = []
 # do something to remove doubles (using a set) and convert the list as an ordered string
-
 def Findclique(Size k, Graphe G):
 	for n in G:
 		A = set(n)
 		B = set(neighbours of n)
-
 		makeClique(A,B,K)
 		G.remove(n)
-
 def makeClique(A,B,k):
-
 	while not B empty() or k < sizeof(A):
 		for n in B:
 			A.add(n)
 			B.add(B - neighbours(B))
-
 			makeClique(A,B,k)
 			#A.remove(n)
-
 	if k == sizeof(A):
 		List.append(A)
-
 #arg: list of sets of nodes that represent a clique
 def f(c):
-
 	for elt
 """
 
@@ -58,8 +51,9 @@ def get_k_clique(k,graph):
         B = set()
         A.add(node)
         [B.add(n) for n in get_neighbours(node,graph)]
-        c = get_clique(k,A,B,graph)
-        clique += c
+        for subset in itertools.permutations(B, k):
+            c = get_clique(k,A,set(subset),graph)
+            clique += c
 
     return clique
 
@@ -81,6 +75,10 @@ def merge_cliques(cliques):
         index+=1
 
     return final_list_of_sets
+def get_list_combinations(liste,taille):
+    for subset in itertools.permutations(liste, taille):
+        print(subset)
+    print("toto")
 
 def is_biggest_set(set1, sets, index, max_len):
     while index < max_len:
@@ -169,23 +167,20 @@ if "__main__" == __name__:
 
         print(k,"-clique: ",clique)
         print("merged clique: ",merge_cliques(clique),"\n")
+
         """
         ### Generate then merge k1 to kn cliques
         k1= 2
         k2= 5
         cliques = []
         print(k1,"to ",k2,"clique:")
-
         for k in range(k1,k2+1):
             print("Generation of a",k,"clique")
             cliques += get_k_clique(k,lg)
-
         print("All cliques: ", cliques)
-
         merged_cliques = merge_cliques(cliques)
         print("Merged cliques: ", merged_cliques)
         print(merged_cliques)
-
         overlapMatrix = matrix.createOverlapMatrix(merged_cliques)
         print(matrix.createCommunitiesMatrix(overlapMatrix, 4))
         """
