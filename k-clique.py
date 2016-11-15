@@ -1,6 +1,5 @@
 import matrix
-from itertools import *
-import itertools
+
 ### K-clique ###
 
 """
@@ -59,9 +58,8 @@ def get_k_clique(k,graph):
         B = set()
         A.add(node)
         [B.add(n) for n in get_neighbours(node,graph)]
-        for subset in itertools.permutations(B, k):
-            c = get_clique(k,A,set(subset),graph)
-            clique += c
+        c = get_clique(k,A,B,graph)
+        clique += c
 
     return clique
 
@@ -83,10 +81,6 @@ def merge_cliques(cliques):
         index+=1
 
     return final_list_of_sets
-def get_list_combinations(liste,taille):
-    for subset in itertools.permutations(liste, taille):
-        print(subset)
-    print("toto")
 
 def is_biggest_set(set1, sets, index, max_len):
     while index < max_len:
@@ -156,8 +150,6 @@ def delete_loop(loadedGraph):
 
 if "__main__" == __name__:
 
-
-
     with open("graph", "r+") as file:
         graph= file.read().splitlines()
 
@@ -177,7 +169,6 @@ if "__main__" == __name__:
 
         print(k,"-clique: ",clique)
         print("merged clique: ",merge_cliques(clique),"\n")
-
         """
         ### Generate then merge k1 to kn cliques
         k1= 2
