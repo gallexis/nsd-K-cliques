@@ -6,15 +6,14 @@ def get_neighbours(node,graph):
     return graph[node]
 
 def get_clique(k,B,graph):
-    #print("\n1:", A, B)
-    A=set()
+    A = set()
+
     while len(B) > 0 and len(A) < k:
         n = B.pop(0)
         A.add(n)
         B = list(set(B).intersection(get_neighbours(n, graph)))
-        #print("2: ",A, B)
         if k == len(A):
-            return {" ".join(sorted(A))} #--> convert {'b','a','c'} to "a b c"
+            return {" ".join(sorted(A))} #--> convert {'c','a','b'} to "a b c"
 
     return []
 
@@ -42,14 +41,14 @@ def merge_cliques(cliques_set):
     while index < max_len:
         set1 = list_of_sets[index]
 
-        if is_biggest_set(set1, list_of_sets, index+1, max_len):
+        if is_biggest_subset(set1, list_of_sets, index+1, max_len):
             final_list_of_sets.append(sorted(set1))
 
         index+=1
 
     return final_list_of_sets
 
-def is_biggest_set(set1, sets, index, max_len):
+def is_biggest_subset(set1, sets, index, max_len):
     while index < max_len:
         if set1.issubset(sets[index]):
             return False
@@ -57,10 +56,6 @@ def is_biggest_set(set1, sets, index, max_len):
         index +=1
 
     return True
-
-def get_list_combinations(liste,taille):
-    for subset in itertools.permutations(liste, taille):
-        print(subset)
 
 
 if "__main__" == __name__:
@@ -79,25 +74,27 @@ if "__main__" == __name__:
 
 
         ### Display a k-clique
-        k = 3
-        clique = get_k_clique(k,lg)
+        #k = 3
+        #clique = get_k_clique(k,lg)
 
-        print(k,"-clique: ",clique)
-        print("merged clique: ",merge_cliques(clique),"\n")
+        #print(k,"-clique: ",clique)
+        #print("merged clique: ",merge_cliques(clique),"\n")
 
-        """
+
         ### Generate then merge k1 to kn cliques
         k1= 2
         k2= 5
         cliques = []
+
         print(k1,"to ",k2,"clique:")
         for k in range(k1,k2+1):
             print("Generation of a",k,"clique")
             cliques += get_k_clique(k,lg)
+
         print("All cliques: ", cliques)
         merged_cliques = merge_cliques(cliques)
+
         print("Merged cliques: ", merged_cliques)
-        print(merged_cliques)
+
         overlapMatrix = matrix.createOverlapMatrix(merged_cliques)
         print(matrix.createCommunitiesMatrix(overlapMatrix, 4))
-        """
