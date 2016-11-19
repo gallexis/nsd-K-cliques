@@ -5,17 +5,16 @@ import itertools
 def get_neighbours(node,graph):
     return graph[node]
 
-def get_clique(k,A,B,graph):
+def get_clique(k,B,graph):
+    #print("\n1:", A, B)
+    A=set()
     while len(B) > 0 and len(A) < k:
-        n = B.pop()
+        n = B.pop(0)
         A.add(n)
-        B = B.intersection(get_neighbours(n, graph))
-        #print(A, n, B)
-
+        B = list(set(B).intersection(get_neighbours(n, graph)))
+        #print("2: ",A, B)
         if k == len(A):
-            sub_cliques = get_clique(k,A,B,graph)
-            #[" ".join(sorted(A))] --> convert {'b','a','c'} to "a b c"
-            return list(set( [" ".join(sorted(A))] + sub_cliques) )
+            return {" ".join(sorted(A))} #--> convert {'b','a','c'} to "a b c"
 
     return []
 
@@ -23,20 +22,18 @@ def get_k_clique(k,graph):
     clique = []
 
     for node in graph:
-        A = set()
         B = set()
-        A.add(node)
         [B.add(n) for n in get_neighbours(node,graph)]
         for subset in itertools.permutations(B, k):
-            c = get_clique(k,A,set(subset),graph)
+            c = get_clique(k,list(subset),graph)
             clique += c
 
     return clique
 
-def merge_cliques(cliques):
+def merge_cliques(cliques_set):
     list_of_sets = []
     final_list_of_sets = []
-    clique_list = sorted(cliques , key=str.__len__)
+    clique_list = sorted(cliques_set, key=str.__len__)
 
     [list_of_sets.append(set(c.split(' '))) for c in clique_list]
 
@@ -52,11 +49,6 @@ def merge_cliques(cliques):
 
     return final_list_of_sets
 
-def get_list_combinations(liste,taille):
-    for subset in itertools.permutations(liste, taille):
-        print(subset)
-    print("toto")
-
 def is_biggest_set(set1, sets, index, max_len):
     while index < max_len:
         if set1.issubset(sets[index]):
@@ -66,6 +58,9 @@ def is_biggest_set(set1, sets, index, max_len):
 
     return True
 
+def get_list_combinations(liste,taille):
+    for subset in itertools.permutations(liste, taille):
+        print(subset)
 
 
 if "__main__" == __name__:
