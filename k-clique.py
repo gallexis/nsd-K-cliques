@@ -13,7 +13,7 @@ def get_clique(node,k,B,graph):
         A.add(n)
         B = list(set(B).intersection(get_neighbours(n, graph)))
         if k == len(A):
-            return {" ".join(sorted(A))} #--> convert {'c','a','b'} to "a b c"
+            return {" ".join(sorted(A))}
 
     return []
 
@@ -73,23 +73,26 @@ if "__main__" == __name__:
 
 
         ### Display a k-clique
+        """
         k = 4
         clique = get_k_clique(k,lg)
 
         print(k,"-clique: ",clique)
         print("merged clique: ",merge_cliques(clique),"\n")
-
+        """
 
         ### Generate then merge k1 to kn cliques
-
-        k1= 2
-        k2= 5
         cliques = []
+        k1 = 2
+        k2 = get_max_degree_nodes(lg)+1
 
-        print(k1,"to ",k2,"clique:")
-        for k in range(k1,k2+1):
-            print("Generation of a",k,"clique")
-            cliques += get_k_clique(k,lg)
+        while True:
+            print("Generation of a",k1,"clique")
+            c= get_k_clique(k1,lg)
+            if c == []:
+                break
+            k1 += 1
+            cliques += c
 
         #print("All cliques: ", cliques)
         merged_cliques = merge_cliques(cliques)
@@ -98,4 +101,4 @@ if "__main__" == __name__:
 
         overlapMatrix = matrix.createOverlapMatrix(merged_cliques)
         print(overlapMatrix)
-        print(matrix.createCommunitiesMatrix(overlapMatrix, 4))
+        print(matrix.createCommunitiesMatrix(overlapMatrix,4 ))

@@ -52,3 +52,6 @@ def delete_loop(loadedGraph):
             loadedGraph[node].remove(node)
 
     return loadedGraph
+
+def get_max_degree_nodes(loadedGraph):
+    return len( max(loadedGraph.values()) )
