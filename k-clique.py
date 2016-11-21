@@ -21,8 +21,7 @@ def get_k_clique(k,graph):
     clique = []
 
     for node in graph:
-        B = set()
-        [B.add(n) for n in get_neighbours(node,graph)]
+        B = get_neighbours(node,graph)
         for subset in itertools.permutations(B, k-1):
             clique += get_clique(node,k,list(subset),graph)
 
