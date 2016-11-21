@@ -56,10 +56,21 @@ def is_biggest_subset(set1, sets, index, max_len):
 
     return True
 
+def get_community(clique_list, matrix):
+    community=set()
+    columnPos=0
+    for line in matrix:
+        if line[columnPos] == 1:
+            for element in clique_list[columnPos]:
+                community.add(element)
+        columnPos=columnPos+1
+    return community
+
+
 
 if "__main__" == __name__:
 
-    with open("graph3", "r+") as file:
+    with open("louvain", "r+") as file:
         graph= file.read().splitlines()
 
         lg = load_graph(graph)
@@ -73,15 +84,16 @@ if "__main__" == __name__:
 
 
         ### Display a k-clique
-        """
-        k = 4
-        clique = get_k_clique(k,lg)
 
-        print(k,"-clique: ",clique)
-        print("merged clique: ",merge_cliques(clique),"\n")
-        """
+        k = 3
+        cliques = get_k_clique(k,lg)
+
+        #print(k,"-clique: ",cliques)
+        #print("merged clique: ",merge_cliques(cliques),"\n")
+
 
         ### Generate then merge k1 to kn cliques
+        """
         cliques = []
         k1 = 2
         k2 = get_max_degree_nodes(lg)+1
@@ -93,12 +105,15 @@ if "__main__" == __name__:
                 break
             k1 += 1
             cliques += c
-
+        """
         #print("All cliques: ", cliques)
         merged_cliques = merge_cliques(cliques)
 
-        #print("Merged cliques: ", merged_cliques)
+        print("Merged cliques: ", merged_cliques)
 
         overlapMatrix = matrix.createOverlapMatrix(merged_cliques)
         print(overlapMatrix)
-        print(matrix.createCommunitiesMatrix(overlapMatrix,4 ))
+        finlaMatrix=matrix.createCommunitiesMatrix(overlapMatrix,3 )
+        print(finlaMatrix)
+        print("community: "+str(get_community(merged_cliques,finlaMatrix)))
+
